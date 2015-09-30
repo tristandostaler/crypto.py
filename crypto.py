@@ -122,34 +122,47 @@ def bruteForceCaesarAndRotX(argv):
         args.append(i)
         res.append(caesar(args))
         res.append(rotX(args))
-    resValues = weightOrderedByLettersFrequency(res)
+    #resValues = weightOrderedByLettersFrequency(res)
+    resValues = getTotalWeightByLettersAndWord(res)
     return res[findHigherValueInArrayIndex(resValues)]
 
 def bruteForceCaesarAndRotXAllResults(argv):
+    res = [""]
     for i in range(0, 27):
         args = list(argv)
         args.append(i)
+        res.append(caesar(args))
+        res.append(rotX(args))
         print "Caesar " + str(i) + ": " + caesar(args)
         print "RotX " + str(i) + ": " + rotX(args)
-    return
+    resValues = getTotalWeightByLettersAndWord(res)
+    return resValues
 
 def bruteForceSingleCharXORFromHex(argv):
     res = [""]
     for x in range(0, 256):
         res.append(strxor_c([unhexlify(argv), x]))
-    resValues = weightOrderedByLettersFrequency(res)
+    #resValues = weightOrderedByLettersFrequency(res)
+    resValues = getTotalWeightByLettersAndWord(res)
     return res[findHigherValueInArrayIndex(resValues)]
 
 def bruteForceSingleCharXORFromHexAllResults(argv):
     res = [""]
     for x in range(0, 256):
         res.append(strxor_c([unhexlify(argv), x]))
-    resValues = weightOrderedByLettersFrequency(res)
+    #resValues = weightOrderedByLettersFrequency(res)
+    resValues = getTotalWeightByLettersAndWord(res)
     return res + resValues
 
-def weightOrderedByLettersFrequency(argv):
+def getTotalWeightByLettersAndWord(argv):
+    res = []
     for i in range(len(argv)):
-        argv[i].lower()
+        res.append(getWeightByLetterFrequencyForSingleValue([argv[i]]) + getWeightOrderedByWordsAppearanceForSingleValue([argv[i]]))
+    return res
+
+def weightOrderedByLettersFrequency(argv):
+    #for i in range(len(argv)):
+    #    argv[i].lower()
 
     res = []
     for i in range(len(argv)):
@@ -177,8 +190,25 @@ def getWeightByLetterFrequencyForSingleValue(argv):
     return total
 
 def weightOrderedByWordsAppearance(argv):
+    res = []
+    for i in range(len(argv)):
+        res.append(getWeightOrderedByWordsAppearanceForSingleValue([argv[i]]))
+    return res
 
-    return ""
+def getWeightOrderedByWordsAppearanceForSingleValue(argv):
+    total = 0
+    try:
+        argv[0].lower().decode('ascii')
+    except:
+        return 0
+    with open("./cryptoWordDictio.txt") as f:
+        allWords = f.readlines()
+        allWords = removeNonASCIIChars(allWords)
+        for i in range(len(allWords)):
+            word = allWords[i].replace("\n", "")
+            if argv[0].__contains__(word):
+                total += len(allWords) - i
+    return total
 
 def callFunctionMultipleTimes(argv):
     res = []
@@ -229,6 +259,11 @@ def arrayAsStringToArray(argv):
     for i in range(len(reta)):
         reta[i] = reta[i].replace("[", "").replace("]", "").replace("'", "")
     return reta
+
+def removeNonASCIIChars(argv):
+    for i in range(len(argv)):
+        argv[i] = argv[i].decode("utf-8").encode("ascii", "replace").replace("?", "")
+    return argv
 
 if __name__ == '__main__':
     firstIndex = 1
