@@ -205,7 +205,7 @@ def getWeightOrderedByWordsAppearanceForSingleValue(argv):
         allWords = f.readlines()
         allWords = removeNonASCIIChars(allWords)
         for i in range(len(allWords)):
-            word = allWords[i].replace("\n", "")
+            word = allWords[i].replace("\n", "").lower()
             if argv[0].__contains__(word):
                 total += len(allWords) - i
     return total
