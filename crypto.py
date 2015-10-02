@@ -77,9 +77,15 @@ def strxor_c(argv):
     return Crypto.Util.strxor.strxor_c(argv[0], int(argv[1]))
 
 def hexlify(argv):
+    return binascii.hexlify(argv[0])
+
+def hexlifyNoNewLine(argv):
     return binascii.hexlify(argv[0].replace("\n", ""))
 
 def unhexlify(argv):
+    return binascii.unhexlify(argv[0])
+
+def unhexlifyNoNewLine(argv):
     return binascii.unhexlify(argv[0].replace("\n", ""))
 
 def hexToBase64(argv):
@@ -167,6 +173,9 @@ def bruteForceMultipleCharXORFromHex(argv):
     return res
 
 def multipleCharXORFromStringAndKey(argv):
+    #var = argv[0]
+    #argv[0] = argv[1]
+    #argv[1] = var
     if len(argv[0]) != len(argv[1]):
         if len(argv[0]) < len(argv[1]):
             argv[1] = argv[1][0:len(argv[0])]
@@ -255,13 +264,24 @@ def callFunctionMultipleTimes(argv):
             res.append("Error with: " + argv[2:] + ": " + str(sys.exc_info()[0]))
     return res
 
-def callFunctionForEachLineInFile(argv):
+def callFunctionForEachLineInFileShowLine(argv):
     res = []
     with open(argv[0]) as f:
         content = f.readlines()
         for i in range(len(content)):
             try:
                 res.append("Line " + str(i) + ": " + str(globals()[argv[1]]([content[i].replace("\n", "")])))
+            except:
+                res.append("Error with: " + content[i] + ": " + str(sys.exc_info()[0]))
+    return res
+
+def callFunctionForEachLineInFile(argv):
+    res = []
+    with open(argv[0]) as f:
+        content = f.readlines()
+        for i in range(len(content)):
+            try:
+                res.append(str(globals()[argv[1]]([content[i].replace("\n", "")])))
             except:
                 res.append("Error with: " + content[i] + ": " + str(sys.exc_info()[0]))
     return res
@@ -310,6 +330,7 @@ if __name__ == '__main__':
     piped = 0
     outputToFile = 0
     inputIsArrayString = 0
+    supportNewLineInReceivedString = 0
     if len(sys.argv) > 1:
         if "-" in sys.argv[1]:
             firstIndex = 2
@@ -334,6 +355,8 @@ if __name__ == '__main__':
                 outputToFile = 1
             if "a" in sys.argv[1]:
                 inputIsArrayString = 1
+            if "m" in sys.argv[1]:
+                supportNewLineInReceivedString = 1
     else:
         print globals().keys()
         exit()
@@ -348,6 +371,10 @@ if __name__ == '__main__':
 
     if inputIsArrayString == 1:
         attr = arrayAsStringToArray(attr)
+
+    if supportNewLineInReceivedString == 1:
+        for i in range(len(attr)):
+            attr[i] = attr[i].replace("\\n", "\n")
 
     ret = str(globals()[sys.argv[firstIndex]](attr))
 
