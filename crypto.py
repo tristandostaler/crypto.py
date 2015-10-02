@@ -101,6 +101,12 @@ def hexToBits(argv):
 def bitsToHex(argv):
     return str(hex(int(argv[0], 2))).replace("0x", "").replace("L", "")
 
+def stringToHex(argv):
+    return argv[0].encode("hex")
+
+def hexToString(argv):
+    return argv[0].decode("hex")
+
 def findHigherValueInArrayIndex(argv):
     higher = argv[0]
     for i in range(len(argv)):
@@ -153,6 +159,36 @@ def bruteForceSingleCharXORFromHexAllResults(argv):
     #resValues = weightOrderedByLettersFrequency(res)
     resValues = getTotalWeightByLettersAndWord(res)
     return res + resValues
+
+def bruteForceMultipleCharXORFromHex(argv):
+    res = [""]
+    
+    
+    return res
+
+def multipleCharXORFromStringAndKey(argv):
+    if len(argv[0]) != len(argv[1]):
+        if len(argv[0]) < len(argv[1]):
+            argv[1] = argv[1][0:len(argv[0])]
+        else:
+            while len(argv[0]) > len(argv[1]):
+                for i in range(len(argv[1])):
+                    argv[1] += argv[1][i]
+            if len(argv[0]) < len(argv[1]):
+                argv[1] = argv[1][0:len(argv[0])]
+    print argv[0]
+    print argv[1]
+    return multipleCharXORFromStringSameLengthKey(argv)
+
+def multipleCharXORFromStringSameLengthKey(argv):
+    var1 = stringToHex([argv[0]])
+    var2 = stringToHex([argv[1]])
+    return multipleCharXORFromHex([var1, var2]);
+
+def multipleCharXORFromHex(argv):
+    var1 = unhexlify([argv[0]])
+    var2 = unhexlify([argv[1]])
+    return hexlify([strxor([var1, var2])])
 
 def getTotalWeightByLettersAndWord(argv):
     res = []
