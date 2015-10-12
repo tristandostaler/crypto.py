@@ -321,19 +321,25 @@ def removeNonASCIIChars(argv):
         argv[i] = argv[i].decode("utf-8").encode("ascii", "replace").replace("?", "")
     return argv
 
+def toLower(argv):
+    return argv[0].lower()
+
+def toUpper(argv):
+    return argv[0].upper()
+
 if __name__ == '__main__':
-    firstIndex = 1
-    toLower = 0
-    toUpper = 0
-    removeSpace = 0
-    removeNewLine = 0
-    piped = 0
-    outputToFile = 0
-    inputIsArrayString = 0
-    supportNewLineInReceivedString = 0
+    var_firstIndex = 1
+    var_toLower = 0
+    var_toUpper = 0
+    var_removeSpace = 0
+    var_removeNewLine = 0
+    var_piped = 0
+    var_outputToFile = 0
+    var_inputIsArrayString = 0
+    var_supportNewLineInReceivedString = 0
     if len(sys.argv) > 1:
         if "-" in sys.argv[1]:
-            firstIndex = 2
+            var_firstIndex = 2
             if "h" in sys.argv[1]:
                 print globals().keys()
                 exit()
@@ -342,41 +348,41 @@ if __name__ == '__main__':
 
                 exit()
             if "l" in sys.argv[1]:
-                toLower = 1
+                var_toLower = 1
             if "u" in sys.argv[1]:
-                toUpper = 1
+                var_toUpper = 1
             if "s" in sys.argv[1]:
-                removeSpace = 1
+                var_removeSpace = 1
             if "n" in sys.argv[1]:
-                removeNewLine = 1
+                var_removeNewLine = 1
             if "p" in sys.argv[1]:
-                piped = 1
+                var_piped = 1
             if "o" in sys.argv[1]:
-                outputToFile = 1
+                var_outputToFile = 1
             if "a" in sys.argv[1]:
-                inputIsArrayString = 1
+                var_inputIsArrayString = 1
             if "m" in sys.argv[1]:
-                supportNewLineInReceivedString = 1
+                var_supportNewLineInReceivedString = 1
     else:
         print globals().keys()
         exit()
 
-    if piped == 0:
-        attr = sys.argv[firstIndex + 1:]
+    if var_piped == 0:
+        var_attr = sys.argv[var_firstIndex + 1:]
     else:
         if len(sys.argv) > 3:
-            attr = sys.argv[firstIndex + 1:] + sys.stdin.readlines()
+            var_attr = sys.argv[var_firstIndex + 1:] + sys.stdin.readlines()
         else:
-            attr = sys.stdin.readlines()
+            var_attr = sys.stdin.readlines()
 
-    if inputIsArrayString == 1:
-        attr = arrayAsStringToArray(attr)
+    if var_inputIsArrayString == 1:
+        var_attr = arrayAsStringToArray(var_attr)
 
-    if supportNewLineInReceivedString == 1:
-        for i in range(len(attr)):
-            attr[i] = attr[i].replace("\\n", "\n")
+    if var_supportNewLineInReceivedString == 1:
+        for i in range(len(var_attr)):
+            var_attr[i] = var_attr[i].replace("\\n", "\n")
 
-    ret = str(globals()[sys.argv[firstIndex]](attr))
+    var_ret = str(globals()[sys.argv[var_firstIndex]](var_attr))
 
     #if piped == 0:
     #    ret = str(globals()[sys.argv[firstIndex]](sys.argv[firstIndex + 1:]))
@@ -386,23 +392,23 @@ if __name__ == '__main__':
     #    else:
     #        ret = str(globals()[sys.argv[firstIndex]](sys.stdin.readlines()))
 
-    if toLower == 1:
-        ret = ret.lower()
+    if var_toLower == 1:
+        var_ret = toLower([var_ret])
     else:
-        if toUpper == 1:
-            ret = ret.upper()
+        if var_toUpper == 1:
+            var_ret = toUpper([var_ret])
 
-    if removeSpace == 1:
-        ret = ret.replace(' ', '')
+    if var_removeSpace == 1:
+        var_ret = var_ret.replace(' ', '')
 
-    if removeNewLine == 1:
-        ret = ret.replace('\n', '')
+    if var_removeNewLine == 1:
+        var_ret = var_ret.replace('\n', '')
 
-    if outputToFile == 1:
+    if var_outputToFile == 1:
         with open("./resultCrypt.out", 'w') as f:
-            reta = ret.split(', ')
-            for i in range(len(reta)):
-                reta[i] = reta[i].replace("[", "").replace("]", "").replace("'", "") + "\n"
-                f.writelines(reta[i])
+            var_reta = var_ret.split(', ')
+            for i in range(len(var_reta)):
+                var_reta[i] = var_reta[i].replace("[", "").replace("]", "").replace("'", "") + "\n"
+                f.writelines(var_reta[i])
     else:
-        print ret
+        print var_ret
